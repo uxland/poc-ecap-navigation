@@ -7,11 +7,30 @@
 </head>
 <body>
     <h1>POC ECAP Test </h1>
+    <hr>
     <p>Apretar el boto per navegar a la home </p>
-    <button onclick="showAlert()">Click Me</button>
+    <button onclick="goToLinkOnEcap('home', 'accio')">Default navigation</button>
+    <hr>
+    <p>Emplenar valors de url i accio per navegar a Ecap</p>
+    <form>
+        <label for="url">Url a navegar</label>
+        <input type="text" id="url" name="url">
+        <label for="Accio">Accios a executar</label>
+        <input type="text" id="accio" name="accio">
+        <button onclick="goToLinkOnEcap(document.getElementById('url').value, document.getElementById('accio').value)">Navegar ecap</button>
+    </form>
     <script>
-        function showAlert() {
-            alert('Hello, World!');
+        function goToLinkOnEcap (url, accio) {
+            if (window.parent) {
+                const ecapEvent = {
+                    TipusEvent: 'URL_EXTERNA',
+                    Accio: accio,
+                    URL_LLAMADA: url,
+                };
+                console.log(JSON.stringify(ecapEvent));
+                //sending data to parent window if opened inside iframe
+                window.parent.postMessage(JSON.stringify(ecapEvent), '*');
+            }
         }
     </script>
 </body>
